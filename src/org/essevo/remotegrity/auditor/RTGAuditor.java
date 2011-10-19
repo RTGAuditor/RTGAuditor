@@ -166,20 +166,29 @@ public class RTGAuditor {
 			
 			/**
 			 * Goes through both xml files and verifies commitments 
+			 * - in fact it goes  first through a file with opened commitments
+			 * and reads every <ac> element. It learns the id of the entry
+			 * and then finds the corresponding <ac> (with the same id) in
+			 * file with commitments. 
 			 */
 		
 			System.out.print("\n\n\tVerification starts: ");
 			for (int authCardRow = 0; authCardRow < nlACOpen.getLength(); authCardRow++) {
 				if (authCardRow % (nlACOpen.getLength() / 20) == 0) { System.out.print("#"); }
 				
-				
 				Element authCardOpen = (Element) nlACOpen.item(authCardRow);
 				
 				int cardID = Integer.parseInt(authCardOpen.getAttribute("id"));
+				//System.out.println("r: "+authCardRow + " " + cardID);
 				//String salt = authCardOpen.getAttribute("salt");
 				//String serial = authCardOpen.getAttribute("serial");
 				
-				Element authCardComm = (Element) nlACComm.item(authCardRow);
+				/**
+				 * this was previously - when everything was opened
+				 *
+				 */
+				 //Element authCardComm = (Element) nlACComm.item(authCardRow); 
+				Element authCardComm = (Element) nlACComm.item(cardID);
 				//String commitmentTOSerial = authCardComm.getAttribute("serial");
 				//System.out.println( cardID + "\t" + salt);
 				//System.out.println("\t" + serial);
@@ -256,7 +265,7 @@ public class RTGAuditor {
 		if (args.length > 0) {
 			path = new String(args[0]);
 		} else {
-			path = "output/";
+			path = "remotegrity/";
 		}
 		
 		if (args.length > 1) {
@@ -277,7 +286,7 @@ public class RTGAuditor {
 			electionConstant = "Stala16znakowa12";
 		}
 		System.out.println("\n\tRemotegrity Auditor");
-		System.out.println("\tVersion 0.9.18. September 19 2011");
+		System.out.println("\tVersion 1.0.13. October 13 2011");
 		System.out.println("\twritten by Filip Zagorski\n");
 		System.out.println("\tAudit start: "+ Calendar.getInstance().getTime().toString());
 		
