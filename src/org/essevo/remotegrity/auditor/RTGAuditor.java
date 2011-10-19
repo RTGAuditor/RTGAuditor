@@ -46,14 +46,18 @@ public class RTGAuditor {
 	 * Checks if the commitment is correct
 	 * @param cardOpen - element of the OPENEd authentication card
 	 * @param cardComm - element of the Commitment authenticaiton card
-	 * @param field - name of the field to be verified: lockInA/lockInB/systemOTP
+	 * @param field - name of the field to be verified: lockInA/lockInB/systemOTP/OTP
 	 * @return - true if commitment is correct
 	 * @throws Exception
 	 */
-	protected boolean verifyCommitment(Element cardOpen, Element cardComm, String field) { //throws Exception {
-		return verifyCommitment(((Element) cardOpen.getElementsByTagName(field).item(0)).getFirstChild().getNodeValue(),
-		((Element) cardOpen.getElementsByTagName(field).item(0)).getAttribute("salt"), 
-		((Element) cardComm.getElementsByTagName(field).item(0)).getFirstChild().getNodeValue());
+	protected boolean verifyCommitment(Element cardOpen, Element cardComm, String field) { 
+		for (int i = 0; i < cardOpen.getElementsByTagName(field).getLength(); i++) {
+			if (!verifyCommitment(((Element) cardOpen.getElementsByTagName(field).item(i)).getFirstChild().getNodeValue(),
+					((Element) cardOpen.getElementsByTagName(field).item(i)).getAttribute("salt"), 
+					((Element) cardComm.getElementsByTagName(field).item(i)).getFirstChild().getNodeValue())) 
+					return false;
+				} 
+		return true;
 	}
 	
 	/**
